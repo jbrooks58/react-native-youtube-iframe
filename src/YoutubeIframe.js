@@ -7,7 +7,12 @@ import React, {
   useImperativeHandle,
   useMemo,
 } from 'react';
-import {View, StyleSheet, Platform} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Platform,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import {WebView} from './WebView';
 import {
   PLAYER_ERROR,
@@ -227,30 +232,32 @@ const YoutubeIframe = (props, ref) => {
 
   return (
     <View style={{height, width}}>
-      <WebView
-        bounces={false}
-        originWhitelist={['*']}
-        allowsInlineMediaPlayback
-        style={[styles.webView, webViewStyle]}
-        mediaPlaybackRequiresUserAction={false}
-        onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
-        allowsFullscreenVideo={!initialPlayerParams?.preventFullScreen}
-        userAgent={
-          forceAndroidAutoplay
-            ? Platform.select({android: CUSTOM_USER_AGENT, ios: ''})
-            : ''
-        }
-        // props above this are override-able
+      <TouchableWithoutFeedback>
+        <WebView
+          bounces={false}
+          originWhitelist={['*']}
+          allowsInlineMediaPlayback
+          style={[styles.webView, webViewStyle]}
+          mediaPlaybackRequiresUserAction={false}
+          onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
+          allowsFullscreenVideo={!initialPlayerParams?.preventFullScreen}
+          userAgent={
+            forceAndroidAutoplay
+              ? Platform.select({android: CUSTOM_USER_AGENT, ios: ''})
+              : ''
+          }
+          // props above this are override-able
 
-        // --
-        {...webViewProps}
-        // --
+          // --
+          {...webViewProps}
+          // --
 
-        //add props that should not be allowed to be overridden below
-        source={source}
-        ref={webViewRef}
-        onMessage={onWebMessage}
-      />
+          //add props that should not be allowed to be overridden below
+          source={source}
+          ref={webViewRef}
+          onMessage={onWebMessage}
+        />
+      </TouchableWithoutFeedback>
     </View>
   );
 };
